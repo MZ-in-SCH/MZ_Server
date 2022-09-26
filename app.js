@@ -1,14 +1,31 @@
-const http = require('http');
+const app = require('express')();
+const helmet = require("helmet");
+const morgan = require("morgan");
+const env = require('dotenv');
+const bodyParser = require('body-parser');
 
-const hostname = '127.0.0.1';
+const userRoutes = require('./routes/user');
+const interestRoutes = require('./routes/interest')
+const policyRoutes = require('./routes/policy')
+
+env.config({ path: './.env' })
+
+app.use(bodyParser.json({
+  limit : 200
+}))
+app.use(helmet())
+// 간단 한 보안 설정을 자동으로 정해주는 helmet 
+app.use(morgan("common"))
+//서버 요청, 응답에 대한 로그를 터미널에 보여줌
+
+//데이터 베이스 연결
+
 const port = 3000;
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
+app.use("/user", userRoutes)
+app.use('/interest', interestRoutes)
+app.use('/policy', policyRoutes)
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+app.listen(port, () => {
+  console.log(`${port}에서 서버 진행 중..`);
 });
