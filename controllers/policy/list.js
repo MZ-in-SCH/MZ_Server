@@ -38,8 +38,8 @@ module.exports = async (req, res) => {
 
     return res.status(200).json({
       status : 200,
-      data : "구현중..sdasd."
-    })
+      data : "구현중..."
+ })
     //xml을 json으로 변경
   }catch(err){
     console.log(err);
